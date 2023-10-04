@@ -1,6 +1,5 @@
-const today = new Date
-const renderTitle = () => { 
-    const hours = today.getHours()
+const renderTitle = (now) => { 
+    const hours = now.getHours()
     let titleText
     if (hours < 5) {
         titleText = "Доброй ночи."
@@ -13,8 +12,8 @@ const renderTitle = () => {
     }
     return titleText
 };
-const getDayOfWeek = () => {
-    const dayOfWeek = today.getDay() + 1
+const getDayOfWeek = (now) => {
+    const dayOfWeek = now.getDay() + 1
     const week = {
         1: 'Понедельник',
         2: 'Вторник',
@@ -28,35 +27,34 @@ const getDayOfWeek = () => {
     return dayOfWeekText = `Сегодня: ${week[dayOfWeek]}`
     
 }
-const getTime = () => {
-    const hours = today.getHours()
-    const minutes = today.getMinutes()
-    const seconds = today.getSeconds()
+const getTime = (now) => {
+    const hours = now.getHours()
+    const minutes = now.getMinutes()
+    const seconds = now.getSeconds()
     let timeText
     if (hours >= 0 && hours < 12) {
-        timeText = `Текущее время: ${Math.floor(hours / 2)}:${minutes}:${seconds} AM`
+        timeText = `Текущее время: ${hours}:${minutes}:${seconds} AM`
     } else if (hours >= 12) {
         timeText = `Текущее время: ${Math.floor(hours / 2)}:${minutes}:${seconds} PM`
     }
     return timeText
 }
-
-const newYearRemaining = () => {
+const newYearRemaining = (now) => {
     const deadline = new Date('01 january 2024')
-    let timeRemaining = (deadline - today.getTime()) / 1000
+    let timeRemaining = (deadline - now.getTime()) / 1000
     return daysText = `До нового года осталось ${Math.floor(timeRemaining / 60 / 60 / 24)} дней` 
 
 }
 const render = () => {
-    const title = document.createElement('p')
-    const today = document.createElement('p')
-    const time = document.createElement('p')
-    const newYear = document.createElement('p')
+    const title = document.createElement('h1')
+    const today = document.createElement('h1')
+    const time = document.createElement('h1')
+    const newYear = document.createElement('h1')
     
-    title.textContent = renderTitle()
-    today.textContent = getDayOfWeek()
-    time.textContent = getTime()
-    newYear.textContent = newYearRemaining()
+    title.classList.add('title')
+    today.classList.add('today')
+    time.classList.add('time')
+    newYear.classList.add('newYear')
 
     document.querySelector('body').append(title)
     document.querySelector('body').append(today)
@@ -66,6 +64,18 @@ const render = () => {
 
 }
 render()
+const updateClock = () => {
+    const now = new Date
+    const title = document.querySelector('.title')
+    const today = document.querySelector('.today')
+    const time = document.querySelector('.time')
+    const newYear = document.querySelector('.newYear')
+    title.textContent = renderTitle(now)
+    today.textContent = getDayOfWeek(now)
+    time.textContent = getTime(now)
+    newYear.textContent = newYearRemaining(now)
+}
+setInterval(updateClock, 1000)
 // Добрый день (утро, вечер, ночь в зависимости от времени суток)
 // Сегодня: Понедельник
 // Текущее время: 12:05:15 PM
